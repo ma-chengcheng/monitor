@@ -2,19 +2,12 @@ package main
 
 import (
 	"context"
-	"github.com/mamachengcheng/octopus/app/backup/master/master/message"
+	"google.golang.org/grpc"
 	"log"
+	pb "master/message"
 	"net"
 )
 
-//import (
-//	"context"
-//	"log"
-//	"net"
-//
-//	//"google.golang.org/grpc"
-//)
-//
 const (
 	port = ":50051"
 )
@@ -25,7 +18,7 @@ type server struct {
 
 func (s *server) GetInfo(ctx context.Context, in *pb.Request) (*pb.Reply, error) {
 	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+	return &pb.Reply{Message: "Hello " + in.GetName()}, nil
 }
 
 func main() {
