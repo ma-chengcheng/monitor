@@ -32,9 +32,7 @@ RUN tar -C /usr/local -xvf go1.15.3.linux-amd64.tar.gz
 ENV PATH $PATH:/usr/local/go/bin
 
 RUN go env -w GO111MODULE=on && \
-    go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+    go env -w GOPROXY=https://goproxy.io,direct
 
 ADD . /src
 WORKDIR /src
-
-RUN go run main.go

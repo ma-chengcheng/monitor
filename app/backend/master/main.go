@@ -8,9 +8,17 @@ import (
 	"time"
 )
 
+//func main() {
+//	r := gin.Default()
+//	r.GET("/ping", func(c *gin.Context) {
+//		c.JSON(200, gin.H{
+//			"message": "pong",
+//		})
+//	})
+//	r.Run("0.0.0.0:8081") // listen and serve on 0.0.0.0:8080
+//}
 
-
-const address = "localhost:5050"
+const address = "127.0.0.1:50051"
 
 
 func main() {
