@@ -9,9 +9,11 @@ service Watcher {
 }
 
 message Request {
-  string name = 1;
+  int32 code = 1;
 }
 
 message Reply {
-  string message = 1;
+  double cpuPercent = 1;
+  double memoryPercent = 2;
+  double diskPercent = 3;
 }

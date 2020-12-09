@@ -5,30 +5,29 @@ import (
 	"google.golang.org/grpc"
 	"log"
 	pb "master/message"
-	"net"
+	"time"
 )
 
-const (
-	port = ":50051"
-)
 
-type server struct {
-	pb.UnimplementedWatcherServer
-}
 
-func (s *server) GetInfo(ctx context.Context, in *pb.Request) (*pb.Reply, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.Reply{Message: "Hello " + in.GetName()}, nil
-}
+const address = "localhost:5050"
+
 
 func main() {
-	lis, err := net.Listen("tcp", port)
+	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Fatalf("did not connect: %v", err)
 	}
-	s := grpc.NewServer()
-	pb.RegisterWatcherServer(s, &server{})
-	if err := s.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+	defer conn.Close()
+	c := pb.NewWatcherClient(conn)
+
+	for true {
+		ctx, _ := context.WithTimeout(context.Background(), time.Second * 10)
+
+		r, err := c.GetInfo(ctx, &pb.Request{Code: 200})
+		if err != nil {
+			log.Fatalf("could not greet: %v", err)
+		}
+		log.Printf("Cpu: %v\nMem: %v\nDisk: %v\n", r.GetCpuPercent(), r.GetMemoryPercent(), r.GetDiskPercent())
 	}
 }
