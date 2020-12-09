@@ -36,3 +36,5 @@ RUN go env -w GO111MODULE=on && \
 
 ADD . /src
 WORKDIR /src
+
+RUN go run main.go
