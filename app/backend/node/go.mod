@@ -12,3 +12,5 @@ require (
 	google.golang.org/grpc v1.34.0
 	google.golang.org/protobuf v1.25.0
 )
+
+replace golang.org/x/text => github.com/golang/text v0.3.4
