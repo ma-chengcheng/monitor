@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"gopkg.in/ini.v1"
-	"master/middlewares"
 	"master/resource"
 	"master/routers"
 )
@@ -20,8 +19,6 @@ func main() {
 	gin.SetMode(gin.DebugMode)
 
 	router := gin.Default()
-
-	router.Use(middlewares.Cors())
 
 	routers.InitRouter(router)
 
