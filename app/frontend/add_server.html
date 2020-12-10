@@ -48,7 +48,7 @@
                 <div class="row animate-box">
                     <div class="col-xs-4 text-left fh5co-heading fh5co-nav top-menu menu-1">
                         <ul>
-                            <li><a href="#">资源概述</a></li>
+                            <li><a href="console.html">资源概述</a></li>
                         </ul>
                     </div>
                 </div>
@@ -62,18 +62,20 @@
                     <div class="row text-center">
                         <div class="col-md-4 col-md-offset-4">
                             <div class=" form-group">
-                                <input type="email" class="form-control" id="exampleInputEmail1" placeholder="HOST IP">
+                                <input v-model="HostName" type="text" class="form-control" placeholder="Host Name">
+                            </div>
+                            <div class=" form-group">
+                                <input v-model="IP" type="text" class="form-control" placeholder="IP">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                <input v-model="SSHUsername" type="text" class="form-control"
                                     placeholder="SSH Username">
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" id="exampleInputPassword1"
+                                <input v-model="SSHPassword" type="password" class="form-control"
                                     placeholder="SSH Password">
                             </div>
-                            <p><a class="btn btn-primary btn-lg btn-demo" href="console.html"></i>添加</a></p>
-
+                            <p><a class="btn btn-primary btn-lg btn-demo" v-on:click="submit">添加</a></p>
                         </div>
                     </div>
                 </div>
@@ -98,6 +100,43 @@
     <script src="js/jquery.flexslider-min.js"></script>
     <!-- Main -->
     <script src="js/main.js"></script>
+    <!-- Vue -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+    <!-- Axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <script>
+        new Vue({
+            el: '#page',
+            data: {
+                HostName: '',
+                IP: '',
+                SSHUsername: '',
+                SSHPassword: ''
+            },
+            methods: {
+                submit() {  //关闭
+                    axios.defaults.headers.common["tonken"] = "asd9iass939kasd993w3k9"
+
+axios.defaults.headers.post["Content-type"] = "application/json"
+                    console.log(this.hostIp, this.sshPassword, this.sshPassword);
+                    axios.post('api/v1/add_worker', {
+                        HostName: this.HostName,
+                        IP: this.IP,
+                        SSHUsername: this.SSHUsername,
+                        SSHPassword: this.SSHPassword
+                    })
+                        .then(function (response) {
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+            },
+        })
+    </script>
 
 </body>
 

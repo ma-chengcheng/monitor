@@ -1,41 +1,30 @@
 package main
 
 import (
-	"context"
-	"google.golang.org/grpc"
-	"log"
-	pb "master/message"
-	"time"
+	"github.com/gin-gonic/gin"
+	"gopkg.in/ini.v1"
+	"master/middlewares"
+	"master/resource"
+	"master/routers"
 )
 
-//func main() {
-//	r := gin.Default()
-//	r.GET("/ping", func(c *gin.Context) {
-//		c.JSON(200, gin.H{
-//			"message": "pong",
-//		})
-//	})
-//	r.Run("0.0.0.0:8081") // listen and serve on 0.0.0.0:8080
-//}
-
-const address = "127.0.0.1:50051"
-
-
 func main() {
-	conn, err := grpc.Dial(address, grpc.WithInsecure(), grpc.WithBlock())
+	cfg, err := ini.Load(resource.ConfFilePath)
+
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		panic(err)
 	}
-	defer conn.Close()
-	c := pb.NewWatcherClient(conn)
 
-	for true {
-		ctx, _ := context.WithTimeout(context.Background(), time.Second * 10)
+	server := cfg.Section("server")
 
-		r, err := c.GetInfo(ctx, &pb.Request{Code: 200})
-		if err != nil {
-			log.Fatalf("could not greet: %v", err)
-		}
-		log.Printf("Cpu: %v\nMem: %v\nDisk: %v\n", r.GetCpuPercent(), r.GetMemoryPercent(), r.GetDiskPercent())
-	}
+	gin.SetMode(gin.DebugMode)
+
+	router := gin.Default()
+
+	router.Use(middlewares.Cors())
+
+	routers.InitRouter(router)
+
+	address := server.Key("http").String() + ":" + server.Key("port").String()
+	router.Run(address)
 }

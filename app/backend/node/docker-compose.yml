@@ -1,7 +1,0 @@
-version: '3'
-services:
-  node:
-    build: .
-    command: go run main.go
-    ports:
-      - 5050:5050

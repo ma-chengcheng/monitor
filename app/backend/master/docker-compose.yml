@@ -1,0 +1,29 @@
+version: '3'
+services:
+#  web:
+#    build: .
+#    command: go run main.go
+#    ports:
+#      - 8081:8081
+#    networks:
+#      - octopus-net
+
+  redis:
+    image: redis:latest
+    networks:
+      octopus-net:
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    networks:
+      - octopus-net
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: 12306
+      TZ: Asia/Shanghai
+    ports:
+      - 3306:3306
+
+networks:
+  octopus-net:
