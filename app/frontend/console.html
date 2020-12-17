@@ -97,7 +97,7 @@
 
                             <ul class="stuff text-right">
                                 <a href="#" class="btn btn-sm btn-info">详情</a>
-                                <a href="#" class="btn btn-sm btn-danger">删除</a>
+                                <a v-on:click="deleteNode(worker.ip)" class="btn btn-sm btn-danger">删除</a>
                             </ul>
                         </div>
                     </div>
@@ -126,6 +126,8 @@
 <script src="js/main.js"></script>
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- Axios -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
     new Vue({
@@ -164,9 +166,8 @@
                 this.initWebSocket();
             },
             websocketonmessage(e) { //数据接收
-                const redata = JSON.parse(e.data);
-                console.log(redata)
-                this.workers = redata.WorkerInfos
+                const reciveData = JSON.parse(e.data);
+                this.workers = reciveData.NodeInfos
             },
             websocketsend(Data) {//数据发送
                 this.websock.send(Data);
@@ -174,6 +175,18 @@
             websocketclose(e) {  //关闭
                 console.log('断开连接', e);
             },
+            deleteNode (ip) {
+                console.log(ip);
+
+                axios.post('/api/v1/delete_node', {
+                    ip: this.IP,
+                }).then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
         },
     })
 </script>

@@ -89,17 +89,17 @@
 </div>
 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <!-- jQuery Easing -->
-<script src="js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
 <!-- Bootstrap -->
-<script src="js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <!-- Waypoints -->
-<script src="js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
 <!-- Flexslider -->
-<script src="js/jquery.flexslider-min.js"></script>
+<script src="/js/jquery.flexslider-min.js"></script>
 <!-- Main -->
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 <!-- Vue -->
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
@@ -117,13 +117,11 @@
         },
         methods: {
             submit() {  //关闭
-                axios.get('/api/v1/add_worker', {
-                    params: {
-                        HostName: this.HostName,
-                        IP: this.IP,
-                        SSHUsername: this.SSHUsername,
-                        SSHPassword: this.SSHPassword
-                    }
+                axios.post('/api/v1/add_node', {
+                    host_name: this.HostName,
+                    ip: this.IP,
+                    ssh_username: this.SSHUsername,
+                    ssh_password: this.SSHPassword
                 }).then(function (response) {
                     console.log(response);
                 })
