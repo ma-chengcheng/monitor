@@ -1,0 +1,44 @@
+version: '3'
+services:
+  master:
+    build: .
+    command: go run main.go
+    ports:
+      - 8080:8080
+    networks:
+      - octopus-net
+
+    nginx:
+      image: nginx:latest
+      ports:
+        - "80:80"
+      depends_on:
+        - "master"
+      volumes:
+        - "$PWD/app/server/master/conf/conf.d:/etc/nginx/conf.d"
+      networks:
+        - app_net
+  redis:
+    network_mode: "bridge"
+    image: redis:latest
+    volumes:
+      - "/src/app/server/master/conf/redis/data:/data"
+    ports:
+      - "6379:6379"
+
+  mysql:
+    network_mode: "bridge"
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_USER: 'test'
+      MYSQL_PASS: '123456'
+      MYSQL_DATABASE: octopus
+      TZ: Asia/Shanghai
+    volumes:
+      - "/src/app/server/master/conf/mysql/db:/var/lib/mysql"
+      - "/src/app/server/master/conf/mysql/my.cnf:/etc/my.cnf"
+      - "/src/app/server/master/conf/mysql/init:/docker-entrypoint-initdb.d/"
+    ports:
+      - "3306:3306"
