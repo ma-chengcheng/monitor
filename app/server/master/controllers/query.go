@@ -5,6 +5,7 @@ import (
 	"golang.org/x/net/websocket"
 	"log"
 	"master/models"
+	"time"
 )
 
 
@@ -35,6 +36,8 @@ func WsConnHandle(conn *websocket.Conn) {
 		if err := websocket.JSON.Send(conn, queryReply); err != nil {
 			log.Println(err)
 			return
+		} else {
+			time.Sleep(time.Second)
 		}
 	}
 }

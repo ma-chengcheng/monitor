@@ -10,17 +10,9 @@
           </div>
           <div class="col-xs-10 text-right menu-1">
             <ul>
-              <li v-bind:class="{'active': current_page === 'home'}">
-                <router-link to="/">首页</router-link>
+              <li>
+                <router-link to="/console">{{ username }}</router-link>
               </li>
-              <li v-bind:class="{'active': current_page === 'login'}">
-                <router-link to="/login">登陆</router-link>
-              </li>
-              <li v-bind:class="{'active': current_page === 'console'}">
-                <router-link to="/console">控制台</router-link>
-              </li>
-              <span v-show="token === ''">1</span>
-              <span v-show="token !== ''">2</span>
             </ul>
           </div>
         </div>
@@ -30,16 +22,24 @@
 </template>
 
 <script>
+import jwtDecode from 'jwt-decode'
+
 export default {
   name: "Header",
   data() {
     return {
-      token: ''
+      username: ''
     }
   },
   props: ['current_page'],
   created() {
-    this.token = this.$cookies.get('token')
+    let token = this.$cookies.get('token');
+    if (token) {
+      token = jwtDecode(token);
+      this.username = token.username;
+    } else {
+      this.$router.push('/');
+    }
   }
 };
 </script>

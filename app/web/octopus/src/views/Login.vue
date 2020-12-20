@@ -1,6 +1,5 @@
 <template xmlns:V-on="http://www.w3.org/1999/xhtml">
   <div class="home">
-    <Header current_page="login"/>
 
     <div class="jumbotron">
       <div class="row">
@@ -56,27 +55,27 @@
 </template>
 
 <script>
-import Header from "@/components/Header.vue";
 import {LoginAPI} from '@/service/user'
 
 export default {
   name: "Login",
-  components: {
-    Header
-  },
   data() {
     return {
       username: "",
       password: "",
     }
   },
+  created() {
+    let token = this.$cookies.get('token');
+    console.log(token);
+  },
   methods: {
     login() {
       LoginAPI(this.username, this.password).then(
         res => {
           if (200 === res.data.code) {
-            this.$cookies.set('token', res.data.data['token'])
-            this.$router.push('/')
+            this.$cookies.set('token', res.data.data['token']);
+            this.$router.push('/console');
           }
         }
       )

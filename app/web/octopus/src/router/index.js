@@ -1,44 +1,39 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import Login from "../views/Login.vue";
+import Register from "../views/Register.vue";
+import Console from "../views/Console.vue";
+import AddNode from "../views/AddNode.vue";
+import Monitor from "../views/Monitor.vue";
+
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Home",
-    component: Home
-  },
-  {
-    path: "/login",
     name: "Login",
-    component: () =>
-      import(/* webpackChunkName: "login" */ "../views/Login.vue")
+    component: Login
   },
   {
     path: "/register",
     name: "Register",
-    component: () =>
-        import(/* webpackChunkName: "register" */ "../views/Register.vue")
+    component: Register
   },
   {
     path: "/console",
     name: "Console",
-    component: () =>
-        import(/* webpackChunkName: "console" */ "../views/Console.vue")
+    component: Console
   },
   {
     path: "/add_node",
     name: "AddNode",
-    component: () =>
-        import(/* webpackChunkName: "add_node" */ "../views/AddNode.vue")
+    component: AddNode
   },
   {
     path: "/monitor",
     name: "Monitor",
-    component: () =>
-        import(/* webpackChunkName: "monitor" */ "../views/Monitor.vue")
+    component: Monitor
   }
 ];
 

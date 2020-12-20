@@ -7,7 +7,9 @@
       <div class="row">
         <div class="col-xs-4 text-left fh5co-heading fh5co-nav top-menu menu-1">
           <ul>
-            <li class="active"><a href="#">资源概述</a></li>
+            <li class="active">
+              <router-link to="/console">资源概述</router-link>
+            </li>
           </ul>
         </div>
         <div class="col-xs-offset-4 col-xs-4 text-right">
@@ -56,7 +58,7 @@
               </div>
 
               <ul class="stuff text-right">
-                <router-link to="/monitor" class="btn btn-sm btn-info">详情</router-link>
+                <a v-on:click="getNodeDetail(nodeInfo)" class="btn btn-sm btn-info">详情</a>
                 <a v-on:click="deleteNode(nodeInfo.ip)" class="btn btn-sm btn-danger">删除</a>
               </ul>
             </div>
@@ -102,13 +104,20 @@ export default {
       let data = JSON.parse(e.data);
       this.nodeInfoList = data["node_info_list"]
     },
+    getNodeDetail(nodeInfo) {
+      this.$router.push({
+        name: 'Monitor',
+        params: {
+          nodeInfo: nodeInfo
+        }
+      });
+    },
     deleteNode(ip) {
       DeleteNodeAPI(ip).then(function (response) {
         console.log(response);
-      })
-          .catch(function (error) {
-            console.log(error);
-          });
+      }).catch(function (error) {
+        console.log(error);
+      });
     }
   },
 };

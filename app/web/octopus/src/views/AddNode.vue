@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-xs-4 text-left fh5co-heading fh5co-nav top-menu menu-1">
             <ul>
-              <li><a href="console.html">资源概述</a></li>
+              <li><router-link to="/console">资源概述</router-link></li>
             </ul>
           </div>
         </div>
@@ -66,7 +66,7 @@ export default {
           res => {
             if (200 === res.data.code) {
               this.$cookies.set('token', res.data.data['token'])
-              this.$router.push('/console')
+              this.$router.push('/console');
             }
           }
       )

@@ -2,34 +2,47 @@
   <div class="home">
     <Header current_page="monitor"/>
     <div class="row">
-      <div class="col-md-10 col-md-offset-1">
+      <div class="col-xs-3 col-md-offset-1">
         <div class="fh5co-blog">
           <div class="blog-text">
-            <h2> CPU </h2>
+            <h4>详情</h4>
+            <div class="row">
+              <div class="col-xs-6 left">IP</div>
+              <div class="col-xs-6 text-right">{{ nodeInfo.ip }}  </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 left">主机名</div>
+              <div class="col-xs-6 text-right">{{ nodeInfo.host_name }}  </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 left">用户名</div>
+              <div class="col-xs-6 text-right">{{ nodeInfo.ssh_username }}</div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 left">用户名</div>
+              <div class="col-xs-6 text-right">{{ nodeInfo.ssh_password }}</div>
+            </div>
+            <div class="row">
+              <div class="col-xs-6 left">状态</div>
+              <div v-if="nodeInfo.status" class="col-xs-6 posted_on text-right" style="color: green;">运行中</div>
+              <div v-else class="col-xs-6 posted_on text-right" style="color: gray;">已停止</div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-7">
+        <div class="fh5co-blog">
+          <div class="blog-text">
+            <h3>CPU使用率</h3>
             <div class="row">
               <div id="cpuChart" style="width: 100%; height: 500px;"></div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="fh5co-blog">
-          <div class="blog-text">
-            <h2> 内存 </h2>
+            <h3>内存使用率</h3>
             <div class="row">
               <div id="memChart" style="width: 100%; height: 500px;"></div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10 col-md-offset-1">
-        <div class="fh5co-blog">
-          <div class="blog-text">
-            <h2> 磁盘 </h2>
+            <h3>磁盘使用率</h3>
             <div class="row">
               <div id="diskChart" style="width: 100%; height: 500px;"></div>
             </div>
@@ -43,7 +56,6 @@
 <script>
 import Header from "@/components/Header.vue";
 
-
 export default {
   name: "Monitor",
   components: {
@@ -51,131 +63,50 @@ export default {
   },
   data() {
     return {
-      date: [],
-      diskData: [],
+      nodeInfo: this.$route.params.nodeInfo
     }
   },
   created() {
-    let now = new Date();
-    for (let i = 0; i < 24; i++) {
-      this.diskData.push(10);
-      this.date.push(now.getHours() + ":" + now.getMinutes());
-    }
+      // let array = ['cpuChart', 'memChart', 'diskChart'];
+      // array.forEach(name=>{
+      //   console.log(name);
+      // });
   },
-  methods: {
-    memChart() {
-      const memChart = this.$echarts.init(document.getElementById('memChart'));
+  methods:{
+    plot(name){
+      // 基于准备好的dom，初始化echarts实例
+      var chart = this.$echarts.init(document.getElementById(name));
+
+      // 指定图表的配置项和数据
       let option = {
         xAxis: {
           type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
-        series: [{
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
-          type: 'line',
-          smooth: true
-        }]
-      };
-      memChart.setOption(option);
-    },
-    diskChart() {
-      const diskChart = this.$echarts.init(document.getElementById('diskChart'));
-      let option = {
-        grid : {
-          top : 40,
-          bottom: 80
-        },
-        tooltip: {
-          trigger: 'axis',
-        },
-        dataZoom: [
-          {
-            type: 'slider',
-            start: 0, // 起始0
-            end: 100, // 终止100
-            minSpan: 1,
-            bottom: '0%',
-            dataBackground: {
-              lineStyle: {
-                color: '#F0F2F5'
-              },
-              areaStyle: {
-                color: '#F0F2F5',
-                opacity: 1,
-              }
-            }
-          },
-          {
-            type: 'inside'//使鼠标在图表中时滚轮可用
-          }
-        ],
-        xAxis: {
-          type: 'category',
-          splitNumber: 24,
+          data: ['60秒', '50', '40', '30', '20', '10', '0'],
           boundaryGap: false,
-          data: this.date,
-          splitLine: {
-            show: true
-          },
         },
         yAxis: {
           type: 'value',
-          boundaryGap: [0, '100%'],
           splitLine: {
             show: false
           }
         },
-        series: [ // 曲线设置
-          {
-            data: this.diskData,
-            type: 'line',
-            smooth: true,
-            symbol: 'circle',
-            areaStyle: { // 区域设置
-              color: {
-                type: 'linear',
-                x: 0,
-                y: 0,
-                x2: 0,
-                y2: 1,
-                colorStops: [{
-                  offset: 0, color: "red" // 100% 处的颜色
-                }, {
-                  offset: 1, color: "white"  // 0% 处的颜色
-                }]
-              }
-            },
-          },
-        ],
-      };
-      diskChart.setOption(option);
-    },
-    cpuChart() {
-      const cpuChart = this.$echarts.init(document.getElementById('cpuChart'));
-      let option = {
-        xAxis: {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-          type: 'value'
-        },
         series: [{
-          data: [820, 932, 901, 934, 1290, 1330, 1320],
+          data: [0, 0, 0, 0, 0, 0, 0],
           type: 'line',
           smooth: true
         }]
       };
-      cpuChart.setOption(option);
+
+
+      // 使用刚指定的配置项和数据显示图表。
+      chart.setOption(option);
     }
   },
   mounted() {
-    this.diskChart();
-    this.cpuChart();
-    this.memChart();
+    var array = ['cpuChart', 'memChart', 'diskChart'];
+    array.forEach(name => {
+      this.plot(name);
+    });
   }
 };
 </script>
