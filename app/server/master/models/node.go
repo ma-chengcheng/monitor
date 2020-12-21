@@ -33,6 +33,15 @@ type NodeInfo struct {
 	Status        bool    `json:"status"`
 }
 
+func CheckNode(ip string) bool {
+	var count int64
+	utils.MysqlDB.Model(Node{}).Where(Node{IP: ip}).Count(&count)
+	if count > 0 {
+		return true
+	}
+	return false
+}
+
 func AddNode(node Node) {
 	utils.MysqlDB.Create(&node)
 	utils.RedisDB.Do(utils.RedisDBCtx, "SADD", "hosts", node.IP)
@@ -44,33 +53,12 @@ func DeleteNode(ip string) {
 	utils.RedisDB.Do(utils.RedisDBCtx, "SREM", "hosts", node.IP)
 }
 
-func CheckNode(ip string) bool {
-	var count int64
-	utils.MysqlDB.Model(Node{}).Where(Node{IP: ip}).Count(&count)
-	if count > 0 {
-		return true
-	}
-	return false
-}
-
-func GetIPList() []string {
-	res, err := utils.RedisDB.SMembers(utils.RedisDBCtx, "hosts").Result()
-	var ipList []string
-	if err == nil {
-		ipList = res
-	}
-	return ipList
-}
-
-func SetNodeInfo(ip, nodeInfo string) {
-	utils.RedisDB.Set(utils.RedisDBCtx, ip, nodeInfo, time.Second*30)
-}
-
 func GetNodeInfoList() []NodeInfo {
 	var nodes []Node
 	var nodeInfoList []NodeInfo
 
 	utils.MysqlDB.Find(&nodes)
+
 	for _, node := range nodes {
 		res, err := utils.RedisDB.Get(utils.RedisDBCtx, node.IP).Result()
 		status := false
@@ -89,9 +77,22 @@ func GetNodeInfoList() []NodeInfo {
 			CpuPercent:    nodeInfo.CpuPercent,
 			DiskPercent:   nodeInfo.DiskPercent,
 			MemoryPercent: nodeInfo.MemoryPercent,
-			Status: status,
+			Status:        status,
 		})
 	}
 
 	return nodeInfoList
+}
+
+func GetIPList() []string {
+	res, err := utils.RedisDB.SMembers(utils.RedisDBCtx, "hosts").Result()
+	var ipList []string
+	if err == nil {
+		ipList = res
+	}
+	return ipList
+}
+
+func SetNodeInfo(ip, nodeInfo string)  {
+	utils.RedisDB.Set(utils.RedisDBCtx, ip, nodeInfo, time.Second * 30)
 }

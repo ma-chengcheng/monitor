@@ -8,7 +8,9 @@
         <div class="row">
           <div class="col-xs-4 text-left fh5co-heading fh5co-nav top-menu menu-1">
             <ul>
-              <li><router-link to="/console">资源概述</router-link></li>
+              <li>
+                <router-link to="/console">资源概述</router-link>
+              </li>
             </ul>
           </div>
         </div>
@@ -52,7 +54,7 @@ export default {
   components: {
     Header
   },
-  data () {
+  data() {
     return {
       ip: "",
       host_name: "",
@@ -61,15 +63,19 @@ export default {
     }
   },
   methods: {
-    addNode () {
+    addNode() {
       AddNodeAPI(this.ip, this.host_name, this.ssh_username, this.ssh_password).then(
           res => {
             if (200 === res.data.code) {
               this.$cookies.set('token', res.data.data['token'])
               this.$router.push('/console');
+            } else {
+              console.log(res.data.msg);
             }
           }
-      )
+      ).catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }

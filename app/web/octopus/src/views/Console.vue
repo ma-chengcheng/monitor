@@ -58,7 +58,9 @@
               </div>
 
               <ul class="stuff text-right">
-                <a v-on:click="getNodeDetail(nodeInfo)" class="btn btn-sm btn-info">详情</a>
+                <router-link :to="{ name: 'Monitor', params: { ip: nodeInfo.ip }}" class="btn btn-sm btn-info">
+                  详情
+                </router-link>
                 <a v-on:click="deleteNode(nodeInfo.ip)" class="btn btn-sm btn-danger">删除</a>
               </ul>
             </div>
@@ -87,7 +89,7 @@ export default {
     this.initWebSocket();
   },
   destroyed() {
-    this.websock.close() //离开路由之后断开websocket连接
+    this.websock.close();
   },
   methods: {
     initWebSocket() {
@@ -95,27 +97,22 @@ export default {
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.webSocketOnMessage;
       this.websock.onerror = this.webSocketOnError;
-      this.websock.onclose = this.websocketclose;
     },
     webSocketOnError() {
       this.initWebSocket();
     },
-    webSocketOnMessage(e) { //数据接收
+    webSocketOnMessage(e) {
       let data = JSON.parse(e.data);
       this.nodeInfoList = data["node_info_list"]
     },
-    getNodeDetail(nodeInfo) {
-      this.$router.push({
-        name: 'Monitor',
-        params: {
-          nodeInfo: nodeInfo
-        }
-      });
-    },
     deleteNode(ip) {
-      DeleteNodeAPI(ip).then(function (response) {
-        console.log(response);
-      }).catch(function (error) {
+      DeleteNodeAPI(ip).then(
+          res => {
+            if (200 !== res.data.code) {
+              console.log(res.data.msg);
+            }
+          }
+      ).catch(function (error) {
         console.log(error);
       });
     }

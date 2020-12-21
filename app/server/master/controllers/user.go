@@ -13,18 +13,18 @@ func Login(c *gin.Context) {
 	response := utils.Response{
 		Code: 200,
 		Data: make(map[string]interface{}),
-		Msg:  "Login.vue Success",
+		Msg:  "Login Success",
 	}
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		response.Code = 201
-		response.Msg = ""
+		response.Msg = "Parameter Binding Error"
 	} else if !models.CheckUser(user) {
 		response.Code = 202
-		response.Msg = ""
+		response.Msg = "User Not Exists"
 	} else if token, err := utils.GenerateToken(user.Username, user.Password); err != nil {
 		response.Code = 203
-		response.Msg = ""
+		response.Msg = "Token Generate Failure"
 	} else {
 		response.Data.(map[string]interface{})["token"] = token
 	}
@@ -44,10 +44,10 @@ func Register(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&user); err != nil {
 		response.Code = 201
-		response.Msg = ""
+		response.Msg = "Parameter Binding Error"
 	} else if models.CheckUser(user) {
 		response.Code = 202
-		response.Msg = ""
+		response.Msg = "User Already Exists"
 	} else {
 		models.AddUser(user)
 	}

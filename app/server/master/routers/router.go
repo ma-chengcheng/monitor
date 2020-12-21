@@ -13,8 +13,8 @@ func InitRouter(router *gin.Engine) {
 
 	//v1.Use(middlewares.JWT())
 	//{
-	v1.GET("/ws/query", controllers.Query(controllers.WsConnHandle))
-	v1.POST("/add_node", controllers.AddNode)
-	v1.POST("/delete_node", controllers.DeleteNode)
+	v1.GET("/ws/query", controllers.QueryNodesAPI(controllers.WsConnHandle))
+	v1.POST("/add_node", controllers.AddNodeAPI)
+	v1.POST("/delete_node", controllers.DeleteNodeAPI)
 	//}
 }

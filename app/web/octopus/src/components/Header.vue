@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col-xs-2">
             <div id="fh5co-logo">
-              <router-link to="/">八爪鱼</router-link>
+              <router-link to="/console">八爪鱼</router-link>
             </div>
           </div>
           <div class="col-xs-10 text-right menu-1">

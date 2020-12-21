@@ -17,6 +17,10 @@ type User struct {
 	Password string `gorm:"not null" json:"password"`
 }
 
+func AddUser(user User) {
+	utils.MysqlDB.Create(&user)
+}
+
 func CheckUser(user User) bool {
 	var count int64
 	utils.MysqlDB.Model(&User{}).Where("Username = ?", user.Username).Count(&count)
@@ -24,8 +28,4 @@ func CheckUser(user User) bool {
 		return true
 	}
 	return false
-}
-
-func AddUser(user User) {
-	utils.MysqlDB.Create(&user)
 }

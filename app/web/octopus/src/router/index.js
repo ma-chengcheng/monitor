@@ -31,7 +31,7 @@ const routes = [
     component: AddNode
   },
   {
-    path: "/monitor",
+    path: "/monitor/:ip",
     name: "Monitor",
     component: Monitor
   }
