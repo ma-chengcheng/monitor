@@ -17,7 +17,7 @@ type NodeInfo struct {
 	CpuPercent    float64 `json:"cpu_percent"`
 }
 
-func GetNodeInfo(address string, c chan string)  {
+func GetNodeInfo(address string) string {
 	memoryPercent := 0.0
 	diskPercent := 0.0
 	cpuPercent := 0.0
@@ -47,5 +47,5 @@ func GetNodeInfo(address string, c chan string)  {
 	} else {
 		log.Printf("%v", result)
 	}
-	c <- string(result)
+	return string(result)
 }

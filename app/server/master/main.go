@@ -1,10 +1,8 @@
 package main
 
 import (
-	"log"
 	"master/manager/api"
 	"master/models"
-	"time"
 )
 
 func main() {
@@ -23,11 +21,8 @@ func main() {
 	for {
 		for _, ip := range models.GetIPList() {
 
-
 			nodeInfo := api.GetNodeInfo(ip)
 			models.SetNodeInfo(ip, nodeInfo)
-			time.Sleep(time.Second)
-			log.Printf("end %v", ip)
 		}
 	}
 }
