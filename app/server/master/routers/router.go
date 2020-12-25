@@ -3,10 +3,16 @@ package routers
 import (
 	"github.com/gin-gonic/gin"
 	"master/controllers"
+	"net/http"
 )
 
 func InitRouter(router *gin.Engine) {
 	v1 := router.Group("/api/v1")
+
+	router.LoadHTMLFiles("/src/www/index.html")
+	v1.GET("/", func(context *gin.Context) {
+		context.HTML(http.StatusOK, "index.html", nil)
+	})
 
 	v1.POST("/login", controllers.Login)
 	v1.POST("/register", controllers.Register)

@@ -71,8 +71,7 @@ export default {
   },
   methods: {
     login() {
-      LoginAPI(this.username, this.password).then(
-        res => {
+      LoginAPI(this.username, this.password).then(res => {
           if (200 === res.data.code) {
             this.$cookies.set('token', res.data.data['token']);
             this.$router.push('/console');

@@ -55,6 +55,7 @@ func AddNodeAPI(c *gin.Context) {
 		response.Msg = "Node Already Exists"
 	} else {
 		models.AddNode(node)
+
 	}
 	utils.StatusOKResponse(response, c)
 }

@@ -20,6 +20,7 @@ type Node struct {
 	HostName    string `gorm:"not null;unique" json:"host_name"`
 	SSHUsername string `gorm:"not null" json:"ssh_username"`
 	SSHPassword string `json:"ssh_password" gorm:"not null" json:"ssh_username"`
+	NodeID      uint
 }
 
 type NodeInfo struct {
@@ -49,7 +50,7 @@ func AddNode(node Node) {
 
 func DeleteNode(ip string) {
 	var node Node
-	utils.MysqlDB.Where("IP = ?", ip).Delete(&node)
+	utils.MysqlDB.Where("IP = ?", ip).Unscoped().Delete(&node)
 	utils.RedisDB.Do(utils.RedisDBCtx, "SREM", "hosts", node.IP)
 }
 
@@ -61,12 +62,10 @@ func GetNodeInfoList() []NodeInfo {
 
 	for _, node := range nodes {
 		res, err := utils.RedisDB.Get(utils.RedisDBCtx, node.IP).Result()
-		status := false
 
 		nodeInfo := api.NodeInfo{}
 		if err == nil {
 			json.Unmarshal([]byte(res), &nodeInfo)
-			status = true
 		}
 
 		nodeInfoList = append(nodeInfoList, NodeInfo{
@@ -77,7 +76,7 @@ func GetNodeInfoList() []NodeInfo {
 			CpuPercent:    nodeInfo.CpuPercent,
 			DiskPercent:   nodeInfo.DiskPercent,
 			MemoryPercent: nodeInfo.MemoryPercent,
-			Status:        status,
+			Status:        nodeInfo.Status,
 		})
 	}
 
@@ -93,6 +92,6 @@ func GetIPList() []string {
 	return ipList
 }
 
-func SetNodeInfo(ip, nodeInfo string)  {
-	utils.RedisDB.Set(utils.RedisDBCtx, ip, nodeInfo, time.Second * 30)
+func SetNodeInfo(ip, nodeInfo string) {
+	utils.RedisDB.Set(utils.RedisDBCtx, ip, nodeInfo, time.Second*30)
 }

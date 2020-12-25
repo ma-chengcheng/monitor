@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     initWebSocket() {
-      const wsuri = "ws://127.0.0.1:8081/api/v1/ws/query";
+      const wsuri = "ws://127.0.0.1:8082/api/v1/ws/query";
       this.websock = new WebSocket(wsuri);
       this.websock.onmessage = this.webSocketOnMessage;
       this.websock.onerror = this.webSocketOnError;

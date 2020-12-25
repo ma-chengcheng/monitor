@@ -85,6 +85,9 @@ export default {
         },
         yAxis: {
           type: 'value',
+          splitNumber: 11,
+          in: 0,
+          max: 100,
           splitLine: {
             show: false
           }
@@ -101,7 +104,7 @@ export default {
   mounted() {
 
 
-    const wsuri = "ws://127.0.0.1:8081/api/v1/ws/query";
+    const wsuri = "ws://127.0.0.1:8082/api/v1/ws/query";
     this.ws = new WebSocket(wsuri);
     this.ws.onmessage = (e) => {
       let data = JSON.parse(e.data);

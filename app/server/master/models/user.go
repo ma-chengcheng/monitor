@@ -15,6 +15,7 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"not null;unique" json:"username"`
 	Password string `gorm:"not null" json:"password"`
+	Nodes    []Node `gorm:"foreignKey:NodeID" json:"nodes"`
 }
 
 func AddUser(user User) {

@@ -48,7 +48,12 @@ export default {
   },
   methods: {
     register() {
-      RegisterAPI(this.username, this.password).then(
+      RegisterAPI(this.username, this.password).then(res => {
+            if (200 === res.data.code) {
+              this.$cookies.set('token', res.data.data['token']);
+              this.$router.push('/');
+            }
+          }
       )
     }
   }
