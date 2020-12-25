@@ -7,7 +7,7 @@
           <img src="@/assets/logo.png"/>
         </div>
 
-        <div class="col-md-offset-1 col-md-3">
+        <div class="col-md-3">
           <blockquote class="blockquote-reverse">
             <p>一套开源的集群监管系统。</p>
             <footer>
@@ -16,6 +16,36 @@
           </blockquote>
           <div class="row text-center m-auto" style="padding-top: 100px;">
             <div class="col-md-12">
+
+<!--              <a-form :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }">-->
+<!--                <a-form-item label="用户名">-->
+<!--                  <a-input-->
+<!--                      v-model="username"-->
+<!--                      type="text"-->
+<!--                      v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"-->
+<!--                  />-->
+<!--                </a-form-item>-->
+<!--                <a-form-item label="密码">-->
+<!--                  <a-input-->
+<!--                      v-model="password"-->
+<!--                      type="password"-->
+<!--                      v-decorator="['note', { rules: [{ required: true, message: 'Please input your note!' }] }]"-->
+<!--                  />-->
+<!--                </a-form-item>-->
+<!--                <a-row>-->
+<!--                  <a-col :span="24" :style="{ textAlign: 'center' }">-->
+<!--                    <a-button size="large" type="primary" v-on:click="login" >-->
+<!--                      登陆-->
+<!--                    </a-button>-->
+<!--                    <router-link to="/register">-->
+<!--                      <a-button size="large" type="dashed" :style="{ marginLeft: '20px' }">-->
+<!--                        注册-->
+<!--                      </a-button>-->
+<!--                    </router-link>-->
+<!--                  </a-col>-->
+<!--                </a-row>-->
+<!--              </a-form>-->
+
               <div class="form-group">
                 <input
                     v-model="username"
@@ -72,11 +102,11 @@ export default {
   methods: {
     login() {
       LoginAPI(this.username, this.password).then(res => {
-          if (200 === res.data.code) {
-            this.$cookies.set('token', res.data.data['token']);
-            this.$router.push('/console');
+            if (200 === res.data.code) {
+              this.$cookies.set('token', res.data.data['token']);
+              this.$router.push('/console');
+            }
           }
-        }
       )
     }
   }
