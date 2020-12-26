@@ -104,7 +104,7 @@ export default {
   mounted() {
 
 
-    const wsuri = "ws://octopus.belugahut.club/api/v1/ws/query/api/v1/ws/query";
+    const wsuri = "ws://47.101.141.193:8081/api/v1/ws/query/api/v1/ws/query";
     this.ws = new WebSocket(wsuri);
     this.ws.onmessage = (e) => {
       let data = JSON.parse(e.data);
